@@ -4,27 +4,31 @@ import modele.EtatEnvironnement;
 
 public class MoniteurEtatEnvironnement {
 		EtatEnvironnement tampon; 
-		boolean estVide= true;
+		private final int limite;
+		private int nb;
 		
-		public MoniteurEtatEnvironnement() {
+		public MoniteurEtatEnvironnement(int limite) {
+				this.limite = limite;
+				this.nb = limite;
 		}
 		
 		synchronized void prod(EtatEnvironnement mot)
-		{	if (!estVide) 
+		{	if (nb == 0) 
 			{
 				try {wait();}catch (InterruptedException e){};
 			}
 			tampon = mot; 
-			estVide = false; 
+			nb--;
 			notify();
 		}
 		
 		synchronized EtatEnvironnement cons(){
-			if (estVide) 
+			if (nb == this.limite) 
 			{
 				try {wait();} catch (InterruptedException e){};
 			}
-			EtatEnvironnement res = tampon; estVide = true; 
+			EtatEnvironnement res = tampon; 
+			nb++;
 			notify();
 			return res;
 		}

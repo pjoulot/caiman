@@ -6,13 +6,15 @@ import modele.Fifo;
 public class Dispatcher extends Thread {
 	
 	private Fifo env;
-	private MoniteurEtatEnvironnement moniteur;
+	private MoniteurEtatEnvironnement moniteurRRa;
+	private MoniteurEtatEnvironnement moniteurRc;
 	private Fifo inputRRa;
 	private Fifo inputRc;
 
-	public Dispatcher(MoniteurEtatEnvironnement mon, Fifo env, Fifo inputRRa, Fifo inputRc) {
+	public Dispatcher(MoniteurEtatEnvironnement mon1, MoniteurEtatEnvironnement mon2, Fifo env, Fifo inputRRa, Fifo inputRc) {
 		this.env = env;
-		this.moniteur = mon;
+		this.moniteurRRa = mon1;
+		this.moniteurRc = mon2;
 		this.inputRRa = inputRRa;
 		this.inputRc = inputRc;
 	}
