@@ -6,7 +6,7 @@ import modele.*;
 
 public class Main {
 	
-	public static void main() {
+	public static void main(String[] args) {
 		MoniteurEtatEnvironnement moniteurRRa = new MoniteurEtatEnvironnement(10);
 		MoniteurEtatEnvironnement moniteurRc = new MoniteurEtatEnvironnement(50);
 		Fifo env = new Fifo();
@@ -17,8 +17,7 @@ public class Main {
 		Fifo bind = new Fifo();
 		Fifo services = new Fifo();
 		
-		Dispatcher dispatcher = new Dispatcher(moniteurRRa, moniteurRc, env, inputRRa, inputRc);
+		Dispatcher dispatcher = new Dispatcher(moniteurRRa, moniteurRc, env);
 		dispatcher.start();
-		
 	}
 }
