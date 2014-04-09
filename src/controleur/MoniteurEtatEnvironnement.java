@@ -1,34 +1,39 @@
 package controleur;
 
 import modele.EtatEnvironnement;
+import modele.Fifo;
 
 public class MoniteurEtatEnvironnement {
-		EtatEnvironnement tampon; 
+		EtatEnvironnement tampon;
+		private Fifo f;
 		private final int limite;
 		private int nb;
 		
-		public MoniteurEtatEnvironnement(int limite) {
+		public MoniteurEtatEnvironnement(int limite, Fifo f) {
 				this.limite = limite;
 				this.nb = limite;
+				this.f = f;
 		}
 		
 		synchronized void prod(EtatEnvironnement mot)
-		{	if (nb == 0) 
+		{	if (this.nb == 0) 
 			{
 				try {wait();}catch (InterruptedException e){};
 			}
-			tampon = mot; 
-			nb--;
+			this.tampon = mot; 
+			this.f.enqueue(tampon);
+			this.nb--;
 			notify();
 		}
 		
 		synchronized EtatEnvironnement cons(){
-			if (nb == this.limite) 
+			if (this.nb == this.limite) 
 			{
 				try {wait();} catch (InterruptedException e){};
 			}
-			EtatEnvironnement res = tampon; 
-			nb++;
+			EtatEnvironnement res; 
+			this.nb++;
+			res = (EtatEnvironnement) this.f.dequeue();
 			notify();
 			return res;
 		}

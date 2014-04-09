@@ -5,10 +5,10 @@ public class Ressource {
 	private String service;
 	private String nom;
 	private boolean synchro;
-	private float distance;
-	private float qualite; 
+	private double distance;
+	private double qualite; 
 	
-	public Ressource(String nom, String service, boolean synchro, float distance, float qualite) {
+	public Ressource(String nom, String service, boolean synchro, double distance, double qualite) {
 		this.distance = distance;
 		this.nom = nom;
 		this.qualite = qualite;
@@ -40,7 +40,7 @@ public class Ressource {
 		this.synchro = synchro;
 	}
 
-	public float getDistance() {
+	public double getDistance() {
 		return distance;
 	}
 
@@ -48,7 +48,7 @@ public class Ressource {
 		this.distance = distance;
 	}
 
-	public float getQualite() {
+	public double getQualite() {
 		return qualite;
 	}
 

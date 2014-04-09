@@ -22,12 +22,15 @@ public class Dispatcher extends Thread {
 			
 			EtatEnvironnement a = (EtatEnvironnement) env.dequeue();
 			moniteurRc.prod(a);
+			System.out.println("Production RRc");
 			if(t%tau == 0){
 				moniteurRRa.prod(a);
+				t = 0;
+				System.out.println("Production RRa");
 			}
 			
 			try {
-				sleep(1);
+				sleep(5000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
