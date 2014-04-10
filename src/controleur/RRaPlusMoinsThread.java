@@ -1,33 +1,59 @@
 package controleur;
 
-import java.util.LinkedList;
+import java.util.Collection;
+import java.util.List;
 
 import modele.*;
 
 public class RRaPlusMoinsThread extends Thread {
 	
-	RRaPlus plus;
-	RRaMoins moins;
-	Fifo env;
-	RRa rra;
-	Fifo services;
+	private RRaPlusMoins plus;
+	private RRaPlusMoins moins;
+	private List<String> services;
+	private Moniteur<EtatEnvironnement> moniteurRcInput;
+	private Moniteur<RRaPlusMoins> moniteurRcOutput;
 	
 	
-	public RRaPlusMoinsThread(RRaPlus plus, RRaMoins moins) {
-		this.plus = plus;
-		this.moins = moins;
+	public RRaPlusMoinsThread(Moniteur<EtatEnvironnement> mon1, Moniteur<RRaPlusMoins> mon2, List<String> f) {
+		this.moniteurRcInput = mon1;
+		this.moniteurRcOutput = mon2;
+		this.services = f;
+		this.plus = new RRaPlusMoins();
+		this.moins = new RRaPlusMoins();
+		
 	}
 	
 	public void run() {
-		for(Object r : this.env.getQ()) {
-			if( ! rra.getRessources().contains(r) ) {
-				this.plus.add((Ressource)r);
+		EtatEnvironnement a;
+		RRaPlusMoins temp;
+		while(true) {
+			temp = this.plus;
+			a = this.moniteurRcInput.cons();
+			System.out.println("Rc Input : consommation");
+			
+			//On calcule le nouveau RRa-
+			temp.getRessources().getQ().removeAll(a.getRessources());
+			this.moins = temp;
+			
+			//On calcule le nouveau RRa+
+			a.getRessources().removeAll((Collection<?>) this.plus.getRessources().getQ());
+			this.plus = new RRaPlusMoins(new Fifo<Ressource>(a.getRessources()));
+			
+			//Correspondance avec les services
+			for ( Ressource s : this.plus.getRessources().getQ()) {
+				if(!this.services.contains(s.getService())) {
+					this.plus.getRessources().getQ().remove(s);
+				}
 			}
-		}
-		for(Object r : this.rra.getRessources().getQ()) {
-			if( ! this.env.contains(r) ) {
-				this.moins.add((Ressource)r);
+			for ( Ressource s : this.moins.getRessources().getQ()) {
+				if(!this.services.contains(s.getService())) {
+					this.moins.getRessources().getQ().remove(s);
+				}
 			}
+			//Envoi du résultat (attention à l'ordre pour défiler dans i'Q)
+			moniteurRcOutput.prod(plus);
+			moniteurRcOutput.prod(moins);
+			System.out.println("Rc Output : production");
 		}
 	}
 

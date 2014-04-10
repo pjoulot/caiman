@@ -10,12 +10,12 @@ import modele.Ressource;
 
 public class EnvSimulator extends Thread {
 	
-	private Fifo env;
+	private Fifo<EtatEnvironnement> env;
 	
 	public void run() {
 		Ressource a;
 		String ressourceNoms[] = {"Orion", "Aurora", "Dédale", "Prométhée", "Korolev", "Phoenix"};
-		String ressourceServices[] = {"blootooth", "température", "luminosité", "tilt sensor"};
+		String ressourceServices[] = {"bluetooth", "température", "luminosité", "tilt sensor"};
 		
 		Random random;
 		int nbRs;
@@ -25,13 +25,13 @@ public class EnvSimulator extends Thread {
 		List<Ressource> l;
 		
 		while(true) {
-			nbRs = (int)(Math.random() * ressourceNoms.length);
-			nbSer = (int)(Math.random() * ressourceServices.length);
 			distance = (Math.random() * 19) + 1;
 			random = new Random();
 			qualite = Math.random();
 			l = new LinkedList<Ressource>();
 			for(int i=0; i < ((int)(Math.random() * 6) + 4); i++) {
+				nbRs = (int)(Math.random() * ressourceNoms.length);
+				nbSer = (int)(Math.random() * ressourceServices.length);
 				a = new Ressource(ressourceNoms[nbRs], ressourceServices[nbSer], random.nextBoolean(), distance, qualite);
 				l.add(a);
 			}

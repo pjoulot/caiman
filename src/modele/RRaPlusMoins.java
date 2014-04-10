@@ -1,10 +1,15 @@
 package modele;
 
-public class RRa {
+public class RRaPlusMoins {
+
 	private Fifo<Ressource> ressources;
 	
-	public RRa(Fifo<Ressource> services) {
+	public RRaPlusMoins() {
 		this.ressources = new Fifo<Ressource>();
+	}
+	
+	public RRaPlusMoins(Fifo<Ressource> f) {
+		this.ressources = f;
 	}
 	
 	public void add(Ressource r) {
@@ -13,9 +18,5 @@ public class RRa {
 	
 	public Fifo<Ressource> getRessources() {
 		return ressources;
-	}
-
-	public void setRessources(Fifo<Ressource> ressources) {
-		this.ressources = ressources;
 	}
 }

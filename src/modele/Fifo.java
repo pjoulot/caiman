@@ -4,27 +4,31 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Fifo {
-	    private List q = Collections.synchronizedList(new LinkedList());
+public class Fifo<T> {
+	    private List<T> q = Collections.synchronizedList(new LinkedList<T>());
 	    
 	    public Fifo() { 
-	    	q = new LinkedList<Object>(); 
+	    	q = new LinkedList<T>();
+	    }
+	    
+	    public Fifo(List<T> l) { 
+	    	q = l;
 	    }
 	    
 	    public boolean isEmpty() { 
 	    	return q.isEmpty() ;
 	    }
 
-	    public List getQ() {
+	    public List<T> getQ() {
 			return q;
 		}
 
-		public synchronized void enqueue(Object x) {
-	    	((LinkedList) q).addLast(x);
+		public synchronized void enqueue(T x) {
+	    	((LinkedList<T>) q).addLast(x);
 	    	notify();
 	    }
 
-	    public synchronized Object dequeue() { 
+	    public synchronized T dequeue() { 
 	    	if(isEmpty()) {
 	            try {
 	                wait();
@@ -32,7 +36,7 @@ public class Fifo {
 	                ie.printStackTrace();
 	            }
 	        }
-	    	Object n = ((LinkedList) q).removeFirst();
+	    	T n = ((LinkedList<T>) q).removeFirst();
 	    	return n;
 	    }
 	    
