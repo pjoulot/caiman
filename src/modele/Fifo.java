@@ -8,7 +8,7 @@ public class Fifo {
 	    private List q = Collections.synchronizedList(new LinkedList());
 	    
 	    public Fifo() { 
-	    	q = new LinkedList<Object> (); 
+	    	q = new LinkedList<Object>(); 
 	    }
 	    
 	    public boolean isEmpty() { 
