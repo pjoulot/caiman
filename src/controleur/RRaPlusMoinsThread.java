@@ -11,10 +11,10 @@ public class RRaPlusMoinsThread extends Thread {
 	private RRaPlusMoins moins;
 	private List<String> services;
 	private Moniteur<EtatEnvironnement> moniteurRcInput;
-	private Moniteur<RRaPlusMoins> moniteurRcOutput;
+	private Moniteur<CouplePlusMoins> moniteurRcOutput;
 	
 	
-	public RRaPlusMoinsThread(Moniteur<EtatEnvironnement> mon1, Moniteur<RRaPlusMoins> mon2, List<String> f) {
+	public RRaPlusMoinsThread(Moniteur<EtatEnvironnement> mon1, Moniteur<CouplePlusMoins> mon2, List<String> f) {
 		this.moniteurRcInput = mon1;
 		this.moniteurRcOutput = mon2;
 		this.services = f;
@@ -51,8 +51,7 @@ public class RRaPlusMoinsThread extends Thread {
 				}
 			}
 			//Envoi du résultat (attention à l'ordre pour défiler dans i'Q)
-			moniteurRcOutput.prod(plus);
-			moniteurRcOutput.prod(moins);
+			moniteurRcOutput.prod(new CouplePlusMoins(plus, moins, a.getT()));
 			System.out.println("Rc Output : production");
 		}
 	}

@@ -1,6 +1,7 @@
 package modele;
 
 public class RRa {
+	
 	private Fifo<Ressource> ressources;
 	
 	public RRa(Fifo<Ressource> services) {
