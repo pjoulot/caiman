@@ -18,11 +18,16 @@ public class Main extends Thread{
 		Ressource a = new Ressource("Rs1", "bluetooth", false, 2, 0.6);
 		Ressource b = new Ressource("Rs2", "bluetooth", false, 4, 0.7);
 		Ressource c = new Ressource("Rs3", "température", true, 4, 0.8);
+		Ressource d = new Ressource("Rs4", "température", true, 4, 0.9);
+		Ressource f = new Ressource("Rs2", "bluetooth", false, 4, 1);
 		List<Ressource> l = new LinkedList<Ressource>();
 		l.add(a);
 		l.add(b);
+		l.add(c);
+		l.add(d);
 		env.enqueue(new EtatEnvironnement(l));
 		env.enqueue(new EtatEnvironnement(l));
+		l.add(f);
 		env.enqueue(new EtatEnvironnement(l));
 		
 		Fifo<EtatEnvironnement> inputRRa = new Fifo<EtatEnvironnement>();
@@ -60,7 +65,6 @@ public class Main extends Thread{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		l.add(c);
 		env.enqueue(new EtatEnvironnement(l));
 		env.enqueue(new EtatEnvironnement(l));
 		env.enqueue(new EtatEnvironnement(l));

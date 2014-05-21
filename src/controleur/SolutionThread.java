@@ -26,61 +26,6 @@ public class SolutionThread extends Thread {
 		this.bind = bind;
 	}
 	
-	public void run() {
-		EtatEnvironnement rra = null;
-		CouplePlusMoins rraplusmoins = null;
-		long time = 0;
-		int firstIteration = 1;
-		
-		/*******************************/
-		/*
-		rra = moniteurRRaOutput.cons();
-		time = rra.getT();
-		iq = computeBestSolution(rra, services);
-		lastIq = iq;
-		bind.prod(iq);
-		System.out.println(bind.cons().toString());*/
-		
-		/***************************/
-		/* A chaque insertion dans moniteurRRaOutput ou moniteurRcOutput, on effectue le calcul de la solution */
-		while(true) {
-			
-			/*//Si on doit consommer dans RelRes
-			if(time == 0  ) {
-				rra = moniteurRRaOutput.cons();
-				time = rra.getT();
-				iq = computeBestSolution(rra, services);
-				lastIq = iq;
-				bind.prod(iq);
-			}*/
-			//Si on doit consommer dans DeltaRelRes
-			//else {
-			if(time != 0) {
-				rraplusmoins = moniteurRcOutput.cons();
-				time = rraplusmoins.getT();
-				iq = adapt(rra, services, lastIq, rraplusmoins.getRRaMoins(), rraplusmoins.getRRaPlus());
-				if( iq != lastIq) {
-					lastIq = iq;
-					bind.prod(iq);
-				}
-			}
-			else {
-				rra = moniteurRRaOutput.cons();
-				if(firstIteration == 1) {
-					firstIteration = 0;
-					time = rra.getT()+1;
-				}
-				else {
-					time = rra.getT();
-				}
-				iq = computeBestSolution(rra, services);
-				lastIq = iq;
-				bind.prod(iq);
-			}
-			System.out.println(time);
-		}
-	}
-
 	private EtatEnvironnement adapt(EtatEnvironnement rra,
 			List<String> services2, EtatEnvironnement lastIq,
 			RRaPlusMoins rRaMoins, RRaPlusMoins rRaPlus) {
@@ -126,6 +71,44 @@ public class SolutionThread extends Thread {
 		}
 		
 		return iq;
+	}
+
+	public void run() {
+		EtatEnvironnement rra = new EtatEnvironnement();
+		CouplePlusMoins rraplusmoins = new CouplePlusMoins(new RRaPlusMoins(), new RRaPlusMoins(), 0);
+		long time = 0;
+		
+		/*******************************/
+		int firstIteration = 1;
+		
+		/***************************/
+		/* A chaque insertion dans moniteurRRaOutput ou moniteurRcOutput, on effectue le calcul de la solution */
+		while(true) {
+			
+			if(time == 0) {
+				rra = moniteurRRaOutput.cons();
+				rraplusmoins = moniteurRcOutput.cons();
+				time = rra.getT()+1;
+				iq = computeBestSolution(rra, services);
+				lastIq = iq;
+				bind.prod(iq);
+				System.out.println(bind.cons().toString());
+			}
+			else {
+				System.out.println("passe"+rraplusmoins.getT());
+				rraplusmoins = moniteurRcOutput.cons();
+				time = rraplusmoins.getT()+1;
+				if(rraplusmoins.getT() == 4) {
+					time = 0;
+				}
+				iq = adapt(rra, services, lastIq, rraplusmoins.getRRaMoins(), rraplusmoins.getRRaPlus());
+				if( iq != lastIq) {
+					lastIq = iq;
+					bind.prod(iq);
+					System.out.println(bind.cons().toString());
+				}
+			}
+		}
 	}
 
 	private EtatEnvironnement computeBestSolution(EtatEnvironnement a,

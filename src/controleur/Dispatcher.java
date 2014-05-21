@@ -27,17 +27,17 @@ public class Dispatcher extends Thread {
 			
 			EtatEnvironnement a = (EtatEnvironnement) env.dequeue();
 			
-			if(t % this.frequenceEnvC == 0){
-				System.out.println("ENV ==> Rc Input");
-				a.setT(t+1);
-				moniteurRc.prod(a);
-			}
-			
 			if(t % this.frequenceEnvA == 0){
 				System.out.println("ENV ==> RRa Input");
 				a.setT(t);
 				moniteurRRa.prod(a);
 				t = 0;
+			}
+			
+			if(t % this.frequenceEnvC == 0){
+				System.out.println("ENV ==> Rc Input");
+				a.setT(t);
+				moniteurRc.prod(a);
 			}
 			
 			try {
